@@ -84,7 +84,10 @@ function makeCodeRenderPre(pre) {
     f.contentWindow.postMessage({
         type: "renderblocks",
         id: pre.id,
-        code: pre.innerText
+        code: pre.innerText,
+        options: {
+            snippetMode: true,
+        },
     }, makecodeUrl);
 }
 

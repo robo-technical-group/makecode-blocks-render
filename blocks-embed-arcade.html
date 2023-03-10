@@ -1,0 +1,200 @@
+<html lang="en">
+<head>
+    <!--
+        Taken from https://arcade.makecode.com/blocks-embed
+        Using as starting point.
+    -->
+    <title>Blocks Embedding Test Page</title>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    <style>
+        html {font-family: Arial, Helvetica, sans-serif}
+        .boxdiv {padding:5px; display:inline-block; border: solid; background-color: lightgray}
+    </style>
+</head>
+<body>
+
+<h1>Blocks Embedding Test Page</h1>
+
+<h2>Try embedding some blocks...</h2>
+
+<p>Render a simple example.</p>
+
+<div class="boxdiv">
+    <pre class="blocks"><code>
+let counter = 0
+game.onUpdateInterval(5000, function () {
+    console.log("Entering the `on game update every 5000 ms` block.")
+    counter += 1
+    console.logValue("Number of times run", counter)
+})
+    </code></pre>
+</div>
+
+<p>Render <i>Chase the Pizza</i> tutorial project:</p>
+
+<div class="boxdiv">
+    <pre class="blocks"><code>
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    pizza.setPosition(randint(10, 150), randint(10, 110))
+    info.startCountdown(10)
+})
+let pizza: Sprite = null
+scene.setBackgroundColor(9)
+let mySprite = sprites.create(img`
+    . . . . . . . . . . b 5 b . . . 
+    . . . . . . . . . b 5 b . . . . 
+    . . . . . . b b b b b b . . . . 
+    . . . . . b b 5 5 5 5 5 b . . . 
+    . . . . b b 5 d 1 f 5 5 d f . . 
+    . . . . b 5 5 1 f f 5 d 4 c . . 
+    . . . . b 5 5 d f b d d 4 4 . . 
+    . b b b d 5 5 5 5 5 4 4 4 4 4 b 
+    b d d d b b d 5 5 4 4 4 4 4 b . 
+    b b d 5 5 5 b 5 5 5 5 5 5 b . . 
+    c d c 5 5 5 5 d 5 5 5 5 5 5 b . 
+    c b d c d 5 5 b 5 5 5 5 5 5 b . 
+    . c d d c c b d 5 5 5 5 5 d b . 
+    . . c b d d d d d 5 5 5 b b . . 
+    . . . c c c c c c c c b b . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
+controller.moveSprite(mySprite)
+pizza = sprites.create(img`
+    . . . . . . b b b b . . . . . . 
+    . . . . . . b 4 4 4 b . . . . . 
+    . . . . . . b b 4 4 4 b . . . . 
+    . . . . . b 4 b b b 4 4 b . . . 
+    . . . . b d 5 5 5 4 b 4 4 b . . 
+    . . . . b 3 2 3 5 5 4 e 4 4 b . 
+    . . . b d 2 2 2 5 7 5 4 e 4 4 e 
+    . . . b 5 3 2 3 5 5 5 5 e e e e 
+    . . b d 7 5 5 5 3 2 3 5 5 e e e 
+    . . b 5 5 5 5 5 2 2 2 5 5 d e e 
+    . b 3 2 3 5 7 5 3 2 3 5 d d e 4 
+    . b 2 2 2 5 5 5 5 5 5 d d e 4 . 
+    b d 3 2 d 5 5 5 d d d 4 4 . . . 
+    b 5 5 5 5 d d 4 4 4 4 . . . . . 
+    4 d d d 4 4 4 . . . . . . . . . 
+    4 4 4 4 . . . . . . . . . . . . 
+    `, SpriteKind.Food)
+    </code></pre>
+</div>
+
+<p>The Fibonacci example not rendered:</p>
+
+<div class="boxdiv">
+    <pre><code>
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    pizza.setPosition(randint(10, 150), randint(10, 110))
+    info.startCountdown(10)
+})
+let pizza: Sprite = null
+scene.setBackgroundColor(9)
+let mySprite = sprites.create(img`
+    . . . . . . . . . . b 5 b . . . 
+    . . . . . . . . . b 5 b . . . . 
+    . . . . . . b b b b b b . . . . 
+    . . . . . b b 5 5 5 5 5 b . . . 
+    . . . . b b 5 d 1 f 5 5 d f . . 
+    . . . . b 5 5 1 f f 5 d 4 c . . 
+    . . . . b 5 5 d f b d d 4 4 . . 
+    . b b b d 5 5 5 5 5 4 4 4 4 4 b 
+    b d d d b b d 5 5 4 4 4 4 4 b . 
+    b b d 5 5 5 b 5 5 5 5 5 5 b . . 
+    c d c 5 5 5 5 d 5 5 5 5 5 5 b . 
+    c b d c d 5 5 b 5 5 5 5 5 5 b . 
+    . c d d c c b d 5 5 5 5 5 d b . 
+    . . c b d d d d d 5 5 5 b b . . 
+    . . . c c c c c c c c b b . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
+controller.moveSprite(mySprite)
+pizza = sprites.create(img`
+    . . . . . . b b b b . . . . . . 
+    . . . . . . b 4 4 4 b . . . . . 
+    . . . . . . b b 4 4 4 b . . . . 
+    . . . . . b 4 b b b 4 4 b . . . 
+    . . . . b d 5 5 5 4 b 4 4 b . . 
+    . . . . b 3 2 3 5 5 4 e 4 4 b . 
+    . . . b d 2 2 2 5 7 5 4 e 4 4 e 
+    . . . b 5 3 2 3 5 5 5 5 e e e e 
+    . . b d 7 5 5 5 3 2 3 5 5 e e e 
+    . . b 5 5 5 5 5 2 2 2 5 5 d e e 
+    . b 3 2 3 5 7 5 3 2 3 5 d d e 4 
+    . b 2 2 2 5 5 5 5 5 5 d d e 4 . 
+    b d 3 2 d 5 5 5 d d d 4 4 . . . 
+    b 5 5 5 5 d d 4 4 4 4 . . . . . 
+    4 d d d 4 4 4 . . . . . . . . . 
+    4 4 4 4 . . . . . . . . . . . . 
+    `, SpriteKind.Food)
+    </code></pre>
+</div>
+
+<script>
+var makecodeUrl = "https://arcade.makecode.com/";
+var blocksClass = "blocks";
+
+var injectRenderer = function () {
+    var f = $("<iframe>", {
+        id: "makecoderenderer",
+        src: makecodeUrl + "--docs?render=1&lang=" + ($('html').attr('lang') || "en")
+    });
+    f.css("position", "absolute");
+    f.css("left", 0);
+    f.css("bottom", 0);
+    f.css("width", "1px");
+    f.css("height", "1px");
+    $('body').append(f);
+}
+
+function makeCodeRenderPre(pre) {
+    var f = document.getElementById("makecoderenderer");
+    f.contentWindow.postMessage({
+        type: "renderblocks",
+        id: pre.id,
+        code: pre.innerText,
+        options: {
+            snippetMode: false,
+        },
+    }, makecodeUrl);
+}
+
+var attachBlocksListener = function () {
+    var blockId = 0;
+    window.addEventListener("message", function (ev) {
+        var msg = ev.data;
+        if (msg.source != "makecode") return;
+
+        switch (msg.type) {
+            case "renderready":
+                $("." + blocksClass).each(function () {
+                    var snippet = $(this)[0];
+                    snippet.id = "pxt-blocks-" + (blockId++);
+                    makeCodeRenderPre(snippet);
+                });
+                break;
+            case "renderblocks":
+                var svg = msg.svg; // this is a string containing SVG
+                var id = msg.id;   // this is the id you sent
+                // replace text with svg
+                var img = document.createElement("img");
+                img.src = msg.uri;
+                img.width = msg.width;
+                img.height = msg.height;
+                var pre = document.getElementById(id)
+                pre.parentNode.insertBefore(img, pre)
+                pre.parentNode.removeChild(pre);
+                break;
+        }
+    }, false);
+}
+
+$(function () {
+    injectRenderer();
+    attachBlocksListener();
+});
+</script>
+</body>
+</html>

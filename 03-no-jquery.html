@@ -1,0 +1,216 @@
+<html lang="en">
+<head>
+    <!--
+        Taken from https://arcade.makecode.com/blocks-embed
+        Using as starting point.
+    -->
+    <title>Blocks Embedding Test Page</title>
+    <style>
+        html {font-family: Arial, Helvetica, sans-serif}
+        .boxdiv {padding:5px; display:inline-block; border: solid; background-color: lightgray}
+    </style>
+</head>
+<body>
+
+<h1>Blocks Embedding Test Page</h1>
+
+<h2>Try embedding some blocks...</h2>
+
+<p>Render a simple example.</p>
+
+<div class="boxdiv">
+    <pre class="blocks"><code>
+let counter = 0
+game.onUpdateInterval(5000, function () {
+    console.log("Entering the `on game update every 5000 ms` block.")
+    counter += 1
+    console.logValue("Number of times run", counter)
+})
+    </code></pre>
+</div>
+
+<p>Render <i>Chase the Pizza</i> tutorial project:</p>
+
+<div class="boxdiv">
+    <pre class="blocks"><code>
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    pizza.setPosition(randint(10, 150), randint(10, 110))
+    info.startCountdown(10)
+})
+let pizza: Sprite = null
+scene.setBackgroundColor(9)
+let mySprite = sprites.create(img`
+    . . . . . . . . . . b 5 b . . . 
+    . . . . . . . . . b 5 b . . . . 
+    . . . . . . b b b b b b . . . . 
+    . . . . . b b 5 5 5 5 5 b . . . 
+    . . . . b b 5 d 1 f 5 5 d f . . 
+    . . . . b 5 5 1 f f 5 d 4 c . . 
+    . . . . b 5 5 d f b d d 4 4 . . 
+    . b b b d 5 5 5 5 5 4 4 4 4 4 b 
+    b d d d b b d 5 5 4 4 4 4 4 b . 
+    b b d 5 5 5 b 5 5 5 5 5 5 b . . 
+    c d c 5 5 5 5 d 5 5 5 5 5 5 b . 
+    c b d c d 5 5 b 5 5 5 5 5 5 b . 
+    . c d d c c b d 5 5 5 5 5 d b . 
+    . . c b d d d d d 5 5 5 b b . . 
+    . . . c c c c c c c c b b . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
+controller.moveSprite(mySprite)
+pizza = sprites.create(img`
+    . . . . . . b b b b . . . . . . 
+    . . . . . . b 4 4 4 b . . . . . 
+    . . . . . . b b 4 4 4 b . . . . 
+    . . . . . b 4 b b b 4 4 b . . . 
+    . . . . b d 5 5 5 4 b 4 4 b . . 
+    . . . . b 3 2 3 5 5 4 e 4 4 b . 
+    . . . b d 2 2 2 5 7 5 4 e 4 4 e 
+    . . . b 5 3 2 3 5 5 5 5 e e e e 
+    . . b d 7 5 5 5 3 2 3 5 5 e e e 
+    . . b 5 5 5 5 5 2 2 2 5 5 d e e 
+    . b 3 2 3 5 7 5 3 2 3 5 d d e 4 
+    . b 2 2 2 5 5 5 5 5 5 d d e 4 . 
+    b d 3 2 d 5 5 5 d d d 4 4 . . . 
+    b 5 5 5 5 d d 4 4 4 4 . . . . . 
+    4 d d d 4 4 4 . . . . . . . . . 
+    4 4 4 4 . . . . . . . . . . . . 
+    `, SpriteKind.Food)
+    </code></pre>
+</div>
+
+<p>The Fibonacci example not rendered:</p>
+
+<div class="boxdiv">
+    <pre><code>
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeScoreBy(1)
+    pizza.setPosition(randint(10, 150), randint(10, 110))
+    info.startCountdown(10)
+})
+let pizza: Sprite = null
+scene.setBackgroundColor(9)
+let mySprite = sprites.create(img`
+    . . . . . . . . . . b 5 b . . . 
+    . . . . . . . . . b 5 b . . . . 
+    . . . . . . b b b b b b . . . . 
+    . . . . . b b 5 5 5 5 5 b . . . 
+    . . . . b b 5 d 1 f 5 5 d f . . 
+    . . . . b 5 5 1 f f 5 d 4 c . . 
+    . . . . b 5 5 d f b d d 4 4 . . 
+    . b b b d 5 5 5 5 5 4 4 4 4 4 b 
+    b d d d b b d 5 5 4 4 4 4 4 b . 
+    b b d 5 5 5 b 5 5 5 5 5 5 b . . 
+    c d c 5 5 5 5 d 5 5 5 5 5 5 b . 
+    c b d c d 5 5 b 5 5 5 5 5 5 b . 
+    . c d d c c b d 5 5 5 5 5 d b . 
+    . . c b d d d d d 5 5 5 b b . . 
+    . . . c c c c c c c c b b . . . 
+    . . . . . . . . . . . . . . . . 
+    `, SpriteKind.Player)
+controller.moveSprite(mySprite)
+pizza = sprites.create(img`
+    . . . . . . b b b b . . . . . . 
+    . . . . . . b 4 4 4 b . . . . . 
+    . . . . . . b b 4 4 4 b . . . . 
+    . . . . . b 4 b b b 4 4 b . . . 
+    . . . . b d 5 5 5 4 b 4 4 b . . 
+    . . . . b 3 2 3 5 5 4 e 4 4 b . 
+    . . . b d 2 2 2 5 7 5 4 e 4 4 e 
+    . . . b 5 3 2 3 5 5 5 5 e e e e 
+    . . b d 7 5 5 5 3 2 3 5 5 e e e 
+    . . b 5 5 5 5 5 2 2 2 5 5 d e e 
+    . b 3 2 3 5 7 5 3 2 3 5 d d e 4 
+    . b 2 2 2 5 5 5 5 5 5 d d e 4 . 
+    b d 3 2 d 5 5 5 d d d 4 4 . . . 
+    b 5 5 5 5 d d 4 4 4 4 . . . . . 
+    4 d d d 4 4 4 . . . . . . . . . 
+    4 4 4 4 . . . . . . . . . . . . 
+    `, SpriteKind.Food)
+    </code></pre>
+</div>
+<script>
+/**
+ * https://pxt.azureedge.net/blob/192ce73678d26c889a124ca45cb225998d50338b//gh-pages-embed.js
+ * Renders the blocks snippet in an HTML page
+ * @param targetUrl  full editor url (including trailing /)
+ */
+    targetUrl = 'https://arcade.makecode.com/';
+    // pre waiting to be rendered
+    // when undefined, iframe is loaded and ready
+    var pendingPres = [];
+    function injectRenderer() {
+        var f = document.getElementById("makecoderenderer");
+        // check iframe already added to the DOM
+        if (f) {
+            return;
+        }
+        var f = document.createElement("iframe");
+        f.id = "makecoderenderer";
+        f.style.position = "absolute";
+        f.style.left = 0;
+        f.style.bottom = 0;
+        f.style.width = "1px";
+        f.style.height = "1px";
+        f.src = targetUrl + "--docs?render=1"
+        document.body.appendChild(f);
+    }
+
+    function renderPre(pre) {
+    	if(!pre.id) pre.id = Math.random();
+        var f = document.getElementById("makecoderenderer");
+        // check if iframe is added and ready (pendingPres is undefined)
+        if (!f || !!pendingPres) {
+            // queue up
+            pendingPres.push(pre);
+            injectRenderer();
+        } else {
+            f.contentWindow.postMessage({
+                type: "renderblocks",
+                id: pre.id,
+                code: pre.innerText,
+                options: {
+                	// package: "extension=github:" + repo
+                    snippetMode: false,
+                }
+            }, targetUrl);
+        }
+    }
+
+    // listen for messages
+    window.addEventListener("message", function (ev) {
+        var msg = ev.data;
+        if (msg.source != "makecode") return;
+
+        console.log(msg.type)
+        switch (msg.type) {
+            case "renderready":
+                // flush pending requests            				
+                var pres = pendingPres;
+                // set as undefined to notify that iframe is ready
+                pendingPres = undefined;
+                pres.forEach(function (pre) { renderPre(pre); })
+                break;
+            case "renderblocks":
+                var svg = msg.svg; // this is an string containing SVG
+                var id = msg.id; // this is the id you sent
+                // replace text with svg
+                var img = document.createElement("img");
+                img.src = msg.uri;
+                img.width = msg.width;
+                img.height = msg.height;
+                var code = document.getElementById(id);
+                code.parentElement.insertBefore(img, code)
+                code.parentElement.removeChild(code);
+                break;
+        }
+    }, false);
+
+    var pres = document.querySelectorAll("pre[class=blocks]>code");
+    Array.prototype.forEach.call(pres, function (pre) {
+        renderPre(pre);
+    })
+</script>
+</body>
+</html>

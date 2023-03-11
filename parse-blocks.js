@@ -41,7 +41,6 @@ function parseBlocks(targetUrl) {
                 id: pre.id,
                 code: pre.innerText,
                 options: {
-                    // package: "extension=github:" + repo
                     snippetMode: pre.classList.contains('snippet'),
                 }
             }, targetUrl)
@@ -76,7 +75,7 @@ function parseBlocks(targetUrl) {
         }
     }, false)
 
-    var pres = document.querySelectorAll("pre>code[class=blocks]")
+    var pres = document.querySelectorAll("pre>code.blocks")
     Array.prototype.forEach.call(pres, function (pre) {
         renderPre(pre)
     })

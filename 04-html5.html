@@ -1,9 +1,8 @@
-<html lang="en">
+<!DOCTYPE html>
+<html lang="en-US">
 <head>
-    <!--
-        Taken from https://arcade.makecode.com/blocks-embed
-        Using as starting point.
-    -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
     <title>Blocks Embedding Test Page</title>
     <style>
         html {font-family: Arial, Helvetica, sans-serif}
@@ -11,28 +10,34 @@
     </style>
 </head>
 <body>
+    <h1>Blocks Embedding Test Page</h1>
 
-<h1>Blocks Embedding Test Page</h1>
-
-<h2>Try embedding some blocks...</h2>
-
-<p>Render a simple example.</p>
-
-<div class="boxdiv">
-    <pre class="blocks"><code>
+    <h2>Try embedding some blocks...</h2>
+    
+    <p>Render a simple example.</p>
+    
+    <div class="boxdiv">
+        <pre><code class="blocks">
 let counter = 0
 game.onUpdateInterval(5000, function () {
     console.log("Entering the `on game update every 5000 ms` block.")
     counter += 1
     console.logValue("Number of times run", counter)
 })
-    </code></pre>
-</div>
+        </code></pre>
+    </div>
+    
+    <p>Render a block snippet.</p>
 
-<p>Render <i>Chase the Pizza</i> tutorial project:</p>
+    <div class="boxdiv">
+        <pre><code class="blocks snippet">
 
-<div class="boxdiv">
-    <pre class="blocks"><code>
+        </code></pre>
+    </div>
+    <p>Render the <i>Chase the Pizza</i> tutorial project:</p>
+    
+    <div class="boxdiv">
+        <pre><code class="blocks">
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
     pizza.setPosition(randint(10, 150), randint(10, 110))
@@ -77,13 +82,13 @@ pizza = sprites.create(img`
     4 d d d 4 4 4 . . . . . . . . . 
     4 4 4 4 . . . . . . . . . . . . 
     `, SpriteKind.Food)
-    </code></pre>
-</div>
-
-<p>The tutorial not rendered:</p>
-
-<div class="boxdiv">
-    <pre><code>
+        </code></pre>
+    </div>
+    
+    <p>The tutorial not rendered:</p>
+    
+    <div class="boxdiv">
+        <pre><code>
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeScoreBy(1)
     pizza.setPosition(randint(10, 150), randint(10, 110))
@@ -128,89 +133,11 @@ pizza = sprites.create(img`
     4 d d d 4 4 4 . . . . . . . . . 
     4 4 4 4 . . . . . . . . . . . . 
     `, SpriteKind.Food)
-    </code></pre>
-</div>
-<script>
-/**
- * https://pxt.azureedge.net/blob/192ce73678d26c889a124ca45cb225998d50338b//gh-pages-embed.js
- * Renders the blocks snippet in an HTML page
- * @param targetUrl  full editor url (including trailing /)
- */
-    targetUrl = 'https://arcade.makecode.com/';
-    // pre waiting to be rendered
-    // when undefined, iframe is loaded and ready
-    var pendingPres = [];
-    function injectRenderer() {
-        var f = document.getElementById("makecoderenderer");
-        // check iframe already added to the DOM
-        if (f) {
-            return;
-        }
-        var f = document.createElement("iframe");
-        f.id = "makecoderenderer";
-        f.style.position = "absolute";
-        f.style.left = 0;
-        f.style.bottom = 0;
-        f.style.width = "1px";
-        f.style.height = "1px";
-        f.src = targetUrl + "--docs?render=1"
-        document.body.appendChild(f);
-    }
-
-    function renderPre(pre) {
-    	if(!pre.id) pre.id = Math.random();
-        var f = document.getElementById("makecoderenderer");
-        // check if iframe is added and ready (pendingPres is undefined)
-        if (!f || !!pendingPres) {
-            // queue up
-            pendingPres.push(pre);
-            injectRenderer();
-        } else {
-            f.contentWindow.postMessage({
-                type: "renderblocks",
-                id: pre.id,
-                code: pre.innerText,
-                options: {
-                	// package: "extension=github:" + repo
-                    snippetMode: false,
-                }
-            }, targetUrl);
-        }
-    }
-
-    // listen for messages
-    window.addEventListener("message", function (ev) {
-        var msg = ev.data;
-        if (msg.source != "makecode") return;
-
-        console.log(msg.type)
-        switch (msg.type) {
-            case "renderready":
-                // flush pending requests            				
-                var pres = pendingPres;
-                // set as undefined to notify that iframe is ready
-                pendingPres = undefined;
-                pres.forEach(function (pre) { renderPre(pre); })
-                break;
-            case "renderblocks":
-                var svg = msg.svg; // this is an string containing SVG
-                var id = msg.id; // this is the id you sent
-                // replace text with svg
-                var img = document.createElement("img");
-                img.src = msg.uri;
-                img.width = msg.width;
-                img.height = msg.height;
-                var code = document.getElementById(id);
-                code.parentElement.insertBefore(img, code)
-                code.parentElement.removeChild(code);
-                break;
-        }
-    }, false);
-
-    var pres = document.querySelectorAll("pre[class=blocks]>code");
-    Array.prototype.forEach.call(pres, function (pre) {
-        renderPre(pre);
-    })
-</script>
+        </code></pre>
+    </div>
+    <script src="parse-blocks.js"></script>
+    <script>
+        parseBlocks('https://arcade.makecode.com')
+    </script>
 </body>
 </html>

@@ -1,16 +1,16 @@
 const NUM_THREADS = 4
 const SCRIPT_NAME = 'worker-test.js'
+const PROGRAM_NAME = 'Node.js Multithreading Test'
 
-const { send } = require('process')
 const { Worker } = require('worker_threads')
-const workerThreads = []
-const queue = []
-var args = process.argv
-const nodeExe = args[0]
-const scriptFile = args[1]
-args.splice(0, 2)
-console.log(`Received ${args.length} command-line arguments:`)
-console.log(args)
+const __workerThreads = []
+const __queue = []
+var __args = process.argv
+const __nodeExe = __args[0]
+const __scriptFile = __args[1]
+__args.splice(0, 2)
+console.log(`Received ${__args.length} command-line arguments:`)
+console.log(__args)
 
 function createNewWorker(index) {
     const worker = new Worker('./' + SCRIPT_NAME)
@@ -20,8 +20,8 @@ function createNewWorker(index) {
     worker.on('exit', (exitCode) => onExit(exitCode))
     worker.on('close', onClose)
     worker.on('online', () => onOnline())
-    workerThreads[index] = worker
-    if (queue.length > 0) {
+    __workerThreads[index] = worker
+    if (__queue.length > 0) {
         sendNextQueueItem(worker, index)
     }
 }
@@ -39,7 +39,7 @@ function onError(err) {
         msg = msg.substring(semicolon + 2)
     }
     console.error(`Worker thread ${thread} returned an exception: ${msg}`)
-    if (semicolon >= 0 && queue.length > 0) {
+    if (semicolon >= 0 && __queue.length > 0) {
         // Create a new worker thread
         // + to replace the one that just threw an unhandled exception.
         createNewWorker(thread)
@@ -58,8 +58,8 @@ function onExit(code) {
 
 function onMessage(msg) {
     console.log(`Worker ${msg.id} responded with message: ${msg.msg}`)
-    if (queue.length > 0) {
-        sendNextQueueItem(workerThreads[msg.id], msg.id)
+    if (__queue.length > 0) {
+        sendNextQueueItem(__workerThreads[msg.id], msg.id)
     } else {
         threadFinished()
     }
@@ -70,31 +70,45 @@ function onOnline() {
 }
 
 function sendNextQueueItem(worker, index) {
-    var item = queue[0]
-    queue.splice(0, 1)
+    var item = __queue[0]
+    __queue.splice(0, 1)
     worker.postMessage({ id: index, task: item, })
 }
 
+function startup() {
+    console.log('='.repeat(65))
+    console.log(PROGRAM_NAME)
+    console.log(`Node.js started at ${__nodeExe}`)
+    console.log(`Running Node.js version ${process.versions.node}`)
+    console.log(`Script file loaded from ${__scriptFile}`)
+    console.log('='.repeat(65))
+}
+
 function threadFinished(index) {
-    done++
-    if (done >= workerThreads.length) {
+    __threadsDone++
+    if (__threadsDone >= __workerThreads.length) {
         console.log('All done!')
         process.exit()
     } else {
-        console.log(`Threads completed: ${done}.`)
+        console.log(`Threads completed: ${__threadsDone}.`)
     }
 }
 
-var done = 0
+/**
+ * MAIN
+ */
+
+startup()
+var __threadsDone = 0
 for (let i = 0; i < NUM_THREADS; i++) {
     createNewWorker(i)
 }
 
-args.forEach((arg) => {
+__args.forEach((arg) => {
     for (let i = 0; i < 10; i++) {
-        queue.push(arg + '/item' + i)
+        __queue.push(arg + '/item' + i)
     }
 })
 
 // Send items to workers.
-workerThreads.forEach(sendNextQueueItem)
+__workerThreads.forEach(sendNextQueueItem)

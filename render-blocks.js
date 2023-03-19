@@ -1,8 +1,12 @@
 const NUM_THREADS = 4
 const SCRIPT_NAME = 'worker-test.js'
 const PROGRAM_NAME = 'Node.js Multithreading Test'
+/*
+const SCRIPT_NAME = 'worker-makecode.js'
+const PROGRAM_NAME = 'MakeCode Blocks renderer'
+*/
 
-const { Worker } = require('worker_threads')
+const { Worker } = require('node:worker_threads')
 const __workerThreads = []
 const __queue = []
 var __args = process.argv
@@ -105,7 +109,7 @@ for (let i = 0; i < NUM_THREADS; i++) {
 }
 
 __args.forEach((arg) => {
-    for (let i = 0; i < 10; i++) {
+    for (let i = 0; i < 2; i++) {
         __queue.push(arg + '/item' + i)
     }
 })

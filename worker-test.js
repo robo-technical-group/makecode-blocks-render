@@ -1,5 +1,5 @@
 const EXCEPTION_THRESHOLD = 0.1
-const { parentPort } = require('worker_threads')
+const { parentPort } = require('node:worker_threads')
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 var __assignedId = -1
 

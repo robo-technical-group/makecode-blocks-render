@@ -11,3 +11,5 @@
   - https://blog.logrocket.com/complete-guide-threads-node-js/
 * Node.js multithreading: Worker threads and why they matter
   - https://blog.logrocket.com/node-js-multithreading-worker-threads-why-they-matter/
+* Reading a text file using Node.js
+  - https://stackoverflow.com/questions/9168737/read-a-text-file-using-node-js

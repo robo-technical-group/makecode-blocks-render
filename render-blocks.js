@@ -1,9 +1,11 @@
 const { Worker } = require('worker_threads')
 const workerThreads = []
 var args = process.argv
-const nodeExe = args.pop()
-const scriptFile = args.pop()
-console.log(`Received ${args.length} command-line arguments.`)
+const nodeExe = args[0]
+const scriptFile = args[1]
+args.splice(0, 2)
+console.log(`Received ${args.length} command-line arguments:`)
+console.log(args)
 
 function onClose() {
     console.log('Worker thread closed.')

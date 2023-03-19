@@ -1,3 +1,6 @@
+const NUM_THREADS = 4
+const SCRIPT_NAME = 'worker-test.js'
+
 const { Worker } = require('worker_threads')
 const workerThreads = []
 var args = process.argv
@@ -12,19 +15,35 @@ function onClose() {
 }
 
 function onError(err) {
-    console.log(`Worker thread returned an error: ${err}`)
+    var thread = '[unknown]'
+    var msg = err.message
+    var semicolon = msg.indexOf(':')
+    if (semicolon >= 0) {
+        thread = msg.substring(0, semicolon)
+        msg = msg.substring(semicolon + 2)
+    }
+    console.error(`Worker thread ${thread} returned an error: ${msg}`)
 }
 
 function onExit(code) {
     if (code !== 0) {
-        console.log(`Worker exited with error code ${code}.`)
+        console.error(`Worker exited with error code ${code}.`)
     } else {
         console.log('Worker exited.')
     }
+    threadFinished()
 }
 
 function onMessage(msg) {
-    console.log(`Worker responded with message: ${msg}`)
+    console.log(`Worker ${msg.id} responded with message: ${msg.msg}`)
+    threadFinished()
+}
+
+function onOnline() {
+    console.log('Worker online.')
+}
+
+function threadFinished(index) {
     done++
     if (done >= workerThreads.length) {
         console.log('All done!')
@@ -34,23 +53,16 @@ function onMessage(msg) {
     }
 }
 
-function onOnline(msg) {
-    if (msg) {
-        console.log(`Worker online with message: ${msg}`)
-    } else {
-        console.log(`Worker online.`)
-    }
-}
-
-for (let i = 0; i < 4; i++) {
-    workerThreads.push(new Worker('./worker.js'))
-}
 var done = 0
+for (let i = 0; i < NUM_THREADS; i++) {
+    workerThreads.push(new Worker('./' + SCRIPT_NAME))
+}
 workerThreads.forEach((worker, index) => {
     worker.on('message', (msg) => onMessage(msg))
+    worker.on('messageerror', (err) => onError(err))
     worker.on('error', (err) => onError(err))
     worker.on('exit', (exitCode) => onExit(exitCode))
     worker.on('close', onClose)
-    worker.on('online', (msg) => onOnline(msg))
-    worker.postMessage({ task: index, })
+    worker.on('online', () => onOnline())
+    worker.postMessage({ id: index, task: 'Do work!', })
 })

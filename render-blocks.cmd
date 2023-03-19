@@ -1,2 +1,2 @@
 @ECHO OFF
-node render-blocks.js
+node render-blocks.js %*

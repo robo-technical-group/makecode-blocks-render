@@ -4,12 +4,27 @@ const SCRIPT_NAME = 'worker-test.js'
 const { send } = require('process')
 const { Worker } = require('worker_threads')
 const workerThreads = []
+const queue = []
 var args = process.argv
 const nodeExe = args[0]
 const scriptFile = args[1]
 args.splice(0, 2)
 console.log(`Received ${args.length} command-line arguments:`)
 console.log(args)
+
+function createNewWorker(index) {
+    const worker = new Worker('./' + SCRIPT_NAME)
+    worker.on('message', (msg) => onMessage(msg))
+    worker.on('messageerror', (err) => onError(err))
+    worker.on('error', (err) => onError(err))
+    worker.on('exit', (exitCode) => onExit(exitCode))
+    worker.on('close', onClose)
+    worker.on('online', () => onOnline())
+    workerThreads[index] = worker
+    if (queue.length > 0) {
+        sendNextQueueItem(worker, index)
+    }
+}
 
 function onClose() {
     console.log('Worker thread closed.')
@@ -23,7 +38,14 @@ function onError(err) {
         thread = msg.substring(0, semicolon)
         msg = msg.substring(semicolon + 2)
     }
-    console.error(`Worker thread ${thread} returned an error: ${msg}`)
+    console.error(`Worker thread ${thread} returned an exception: ${msg}`)
+    if (semicolon >= 0 && queue.length > 0) {
+        // Create a new worker thread
+        // + to replace the one that just threw an unhandled exception.
+        createNewWorker(thread)
+    } else {
+        threadFinished()
+    }
 }
 
 function onExit(code) {
@@ -32,7 +54,6 @@ function onExit(code) {
     } else {
         console.log('Worker exited.')
     }
-    threadFinished()
 }
 
 function onMessage(msg) {
@@ -66,18 +87,9 @@ function threadFinished(index) {
 
 var done = 0
 for (let i = 0; i < NUM_THREADS; i++) {
-    workerThreads.push(new Worker('./' + SCRIPT_NAME))
+    createNewWorker(i)
 }
-workerThreads.forEach((worker, index) => {
-    worker.on('message', (msg) => onMessage(msg))
-    worker.on('messageerror', (err) => onError(err))
-    worker.on('error', (err) => onError(err))
-    worker.on('exit', (exitCode) => onExit(exitCode))
-    worker.on('close', onClose)
-    worker.on('online', () => onOnline())
-})
 
-const queue = []
 args.forEach((arg) => {
     for (let i = 0; i < 10; i++) {
         queue.push(arg + '/item' + i)

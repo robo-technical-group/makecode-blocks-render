@@ -1,10 +1,10 @@
 const NUM_THREADS = 4
+/*
 const SCRIPT_NAME = 'worker-test.js'
 const PROGRAM_NAME = 'Node.js Multithreading Test'
-/*
+*/
 const SCRIPT_NAME = 'worker-makecode.js'
 const PROGRAM_NAME = 'MakeCode Blocks renderer'
-*/
 
 const { Worker } = require('node:worker_threads')
 const __workerThreads = []
@@ -37,6 +37,9 @@ function onClose() {
 function onError(err) {
     var thread = '[unknown]'
     var msg = err.message
+    console.error(`Worker thread ${thread} returned an exception: ${msg}`)
+    threadFinished()
+    /*
     var semicolon = msg.indexOf(':')
     if (semicolon >= 0) {
         thread = msg.substring(0, semicolon)
@@ -50,6 +53,7 @@ function onError(err) {
     } else {
         threadFinished()
     }
+    */
 }
 
 function onExit(code) {

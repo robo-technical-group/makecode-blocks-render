@@ -1,6 +1,7 @@
 const NUM_THREADS = 4
 const SCRIPT_NAME = 'worker-test.js'
 
+const { send } = require('process')
 const { Worker } = require('worker_threads')
 const workerThreads = []
 var args = process.argv
@@ -36,11 +37,21 @@ function onExit(code) {
 
 function onMessage(msg) {
     console.log(`Worker ${msg.id} responded with message: ${msg.msg}`)
-    threadFinished()
+    if (queue.length > 0) {
+        sendNextQueueItem(workerThreads[msg.id], msg.id)
+    } else {
+        threadFinished()
+    }
 }
 
 function onOnline() {
     console.log('Worker online.')
+}
+
+function sendNextQueueItem(worker, index) {
+    var item = queue[0]
+    queue.splice(0, 1)
+    worker.postMessage({ id: index, task: item, })
 }
 
 function threadFinished(index) {
@@ -64,5 +75,14 @@ workerThreads.forEach((worker, index) => {
     worker.on('exit', (exitCode) => onExit(exitCode))
     worker.on('close', onClose)
     worker.on('online', () => onOnline())
-    worker.postMessage({ id: index, task: 'Do work!', })
 })
+
+const queue = []
+args.forEach((arg) => {
+    for (let i = 0; i < 10; i++) {
+        queue.push(arg + '/item' + i)
+    }
+})
+
+// Send items to workers.
+workerThreads.forEach(sendNextQueueItem)
